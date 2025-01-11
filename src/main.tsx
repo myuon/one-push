@@ -1,7 +1,5 @@
-export const App = () => (
-  <div>
-    <h1>hoge piyo</h1>
+import { createRoot } from "react-dom/client";
+import { App } from "./App";
 
-    <p>Lorem ipsum</p>
-  </div>
-);
+const root = createRoot(document.getElementById("root")!);
+root.render(<App />);
