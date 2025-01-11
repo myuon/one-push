@@ -1,4 +1,6 @@
-if (Bun.env.DEV === "true") {
+const isDev = Bun.env.DEV === "true";
+
+if (isDev) {
   await Bun.build({
     entrypoints: ["./web/main.tsx"],
     outdir: "./web/dist",
@@ -6,6 +8,7 @@ if (Bun.env.DEV === "true") {
 }
 
 Bun.serve({
+  development: isDev,
   port: 8080,
   async fetch(request, server) {
     const url = new URL(request.url);
