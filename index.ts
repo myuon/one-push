@@ -14,9 +14,7 @@ Bun.serve({
     const isIndex = url.pathname === "/" || url.pathname === "";
 
     return new Response(
-      await Bun.file(
-        `./public${isIndex ? "/index.html" : url.pathname}`
-      ).bytes(),
+      await Bun.file(`./web${isIndex ? "/index.html" : url.pathname}`).bytes(),
       {}
     );
   },
