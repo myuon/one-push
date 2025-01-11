@@ -3,13 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest",
-    "concurrently": "^9.1.2"
+    "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  },
-  "scripts": {
-    "dev": "concurrently \"cd web && bun run dev\" \"bun run index.ts --watch\""
   }
 }
