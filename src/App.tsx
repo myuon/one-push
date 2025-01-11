@@ -1,6 +1,6 @@
 export const App = () => (
   <div>
-    <h1>hoge piyo</h1>
+    <h1>Hello, World!</h1>
 
     <p>
       Lorem ipsum:{" "}
