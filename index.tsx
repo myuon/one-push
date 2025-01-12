@@ -162,14 +162,10 @@ Bun.serve(
           return handler(request);
         }
 
-        if (request.method === "GET" && path.pathname === "/main.js") {
+        const distFile = Bun.file("./dist" + path.pathname);
+        if (request.method === "GET" && (await distFile.exists())) {
           return new Response(Bun.file("./dist/main.js"), {
-            headers: { "Content-Type": "application/javascript" },
-          });
-        }
-        if (request.method === "GET" && path.pathname === "/main.css") {
-          return new Response(Bun.file("./dist/main.css"), {
-            headers: { "Content-Type": "text/css" },
+            headers: { "Content-Type": distFile.type },
           });
         }
 

@@ -28,6 +28,7 @@ export const RoomItemsPage = () => {
           <div>
             <p>{item.summary}</p>
             <small>{new Date(item.created_at * 1000).toLocaleString()}</small>
+            <button>削除</button>
           </div>
         </div>
       ))}
