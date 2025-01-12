@@ -17,9 +17,7 @@ export const RoomPage = () => {
   return (
     <div style={{ display: "grid" }}>
       <div>
-        <p>{room.id}</p>
-        <p>created_at: {room.created_at}</p>
-        <p>updated_at: {room.created_at}</p>
+        <p>Room: {room.id}</p>
       </div>
 
       <Link to="./upload">UPLOAD</Link>

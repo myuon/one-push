@@ -1,5 +1,6 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import type { Item } from "../../../models/item";
+import "./items.modules.css";
 
 const loader = async ({ params }: LoaderFunctionArgs) => {
   const resp = await fetch(`/api/rooms/${params.roomId}/items`, {
@@ -12,27 +13,29 @@ export const RoomItemsPage = () => {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div>
-      {data.map((item) => (
-        <div key={item.id}>
-          <div>
-            <div>{item.item_type}</div>
-            {item.item_type === "image" ? (
-              <img
-                src={`/api/items/${item.id}/raw`}
-                style={{ maxWidth: "100%" }}
-                loading="lazy"
-              />
-            ) : null}
+    <main className="page">
+      <h2>Files</h2>
+
+      <div className="item-list">
+        {data.map((item) => (
+          <div key={item.id} className="item">
+            <div className="item-cover">
+              {/* <div>{item.item_type}</div> */}
+              {item.item_type === "image" ? (
+                <img src={`/api/items/${item.id}/raw`} loading="lazy" />
+              ) : null}
+            </div>
+            <div className="item-content">
+              <p>{item.summary}</p>
+              <small>{new Date(item.created_at * 1000).toLocaleString()}</small>
+            </div>
+            <div>
+              <button>削除</button>
+            </div>
           </div>
-          <div>
-            <p>{item.summary}</p>
-            <small>{new Date(item.created_at * 1000).toLocaleString()}</small>
-            <button>削除</button>
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </main>
   );
 };
 
