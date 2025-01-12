@@ -199,6 +199,13 @@ Bun.serve(
           });
         }
 
+        const publicFile = Bun.file("./public" + path.pathname);
+        if (request.method === "GET" && (await publicFile.exists())) {
+          return new Response(publicFile, {
+            headers: { "Content-Type": publicFile.type },
+          });
+        }
+
         return new Response(Bun.file("./index.html"), {
           headers: { "Content-Type": "text/html" },
         });
@@ -206,7 +213,7 @@ Bun.serve(
     },
     {
       buildConfig: {
-        entrypoints: ["./src/main.tsx"],
+        entrypoints: ["./src/main.tsx", "./src/sw.ts"],
         outdir: "./dist",
         experimentalCss: true,
       },
