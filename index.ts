@@ -132,6 +132,24 @@ const routes = {
         });
       },
     },
+    {
+      method: "DELETE",
+      handler: async (params: Record<string, string>) => {
+        const itemId = params.itemId;
+
+        const file = Bun.file(`./db/objects/${itemId}`);
+        // @ts-ignore @types/bun does not support delete() for now
+        await file.delete();
+
+        db.query(`DELETE FROM items WHERE id = $item_id`).run({
+          item_id: itemId,
+        });
+
+        return new Response(null, {
+          status: 204,
+        });
+      },
+    },
   ],
   "/api/items/:itemId/raw": [
     {

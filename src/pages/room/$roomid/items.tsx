@@ -1,4 +1,8 @@
-import { useLoaderData, type LoaderFunctionArgs } from "react-router";
+import {
+  useLoaderData,
+  useNavigate,
+  type LoaderFunctionArgs,
+} from "react-router";
 import type { Item } from "../../../models/item";
 import "./items.modules.css";
 
@@ -11,6 +15,7 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export const RoomItemsPage = () => {
   const data = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
 
   return (
     <main className="page">
@@ -30,9 +35,22 @@ export const RoomItemsPage = () => {
               <p>{item.summary}</p>
               <small>{new Date(item.created_at * 1000).toLocaleString()}</small>
             </div>
-            <div>
-              <button>削除</button>
-            </div>
+            <button
+              onClick={async () => {
+                const resp = await fetch(`/api/items/${item.id}`, {
+                  method: "DELETE",
+                });
+                if (!resp.ok) {
+                  console.error(resp.statusText);
+                  throw new Error("Failed to delete");
+                }
+
+                // revalidate
+                await navigate(".", { replace: true });
+              }}
+            >
+              削除
+            </button>
           </div>
         ))}
       </div>
