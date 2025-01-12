@@ -13,6 +13,8 @@ export const RoomUploadPage = () => {
           const formData = new FormData(event.currentTarget);
           const file = formData.get("file") as File;
 
+          console.log(file);
+
           const resp = await fetch(`/api/rooms/${roomId}/upload`, {
             method: "POST",
             body: JSON.stringify({

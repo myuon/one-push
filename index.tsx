@@ -50,6 +50,25 @@ Bun.serve(
           }
           {
             const params = parsePathParam(
+              "/api/rooms/:roomId/items",
+              path.pathname
+            );
+            if (params !== undefined && request.method === "GET") {
+              console.log(params.roomId);
+
+              const result = db
+                .query(`SELECT * FROM items WHERE room_id = $room_id`)
+                .all({
+                  room_id: params.roomId,
+                });
+
+              return new Response(JSON.stringify(result), {
+                headers: { "Content-Type": "application/json" },
+              });
+            }
+          }
+          {
+            const params = parsePathParam(
               "/api/rooms/:roomId/upload",
               path.pathname
             );

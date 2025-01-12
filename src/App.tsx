@@ -8,6 +8,7 @@ import {
 import { IndexPage } from "./pages/Index";
 import { RoomPage } from "./pages/Room";
 import { RoomUploadPage } from "./pages/RoomUpload";
+import { RoomItemsPage } from "./pages/RoomItems";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,13 @@ const router = createBrowserRouter([
     path: "/rooms/:roomId",
     element: <RoomPage />,
     loader: RoomPage.loader,
+    children: [
+      {
+        path: "",
+        element: <RoomItemsPage />,
+        loader: RoomItemsPage.loader,
+      },
+    ],
   },
   {
     path: "/rooms/:roomId/upload",

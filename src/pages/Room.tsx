@@ -1,4 +1,9 @@
-import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import {
+  Link,
+  Outlet,
+  useLoaderData,
+  type LoaderFunctionArgs,
+} from "react-router";
 import type { Room } from "../models/room";
 
 const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -10,12 +15,16 @@ export const RoomPage = () => {
   const room = useLoaderData<typeof loader>();
 
   return (
-    <div>
-      <p>{room.id}</p>
-      <p>created_at: {room.created_at}</p>
-      <p>updated_at: {room.created_at}</p>
+    <div style={{ display: "grid" }}>
+      <div>
+        <p>{room.id}</p>
+        <p>created_at: {room.created_at}</p>
+        <p>updated_at: {room.created_at}</p>
+      </div>
 
       <Link to="./upload">UPLOAD</Link>
+
+      <Outlet />
     </div>
   );
 };
