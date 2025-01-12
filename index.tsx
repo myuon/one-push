@@ -167,6 +167,11 @@ Bun.serve(
             headers: { "Content-Type": "application/javascript" },
           });
         }
+        if (request.method === "GET" && path.pathname === "/main.css") {
+          return new Response(Bun.file("./dist/main.css"), {
+            headers: { "Content-Type": "text/css" },
+          });
+        }
 
         return new Response(Bun.file("./index.html"), {
           headers: { "Content-Type": "text/html" },
@@ -177,6 +182,7 @@ Bun.serve(
       buildConfig: {
         entrypoints: ["./src/main.tsx"],
         outdir: "./dist",
+        experimentalCss: true,
       },
     }
   )

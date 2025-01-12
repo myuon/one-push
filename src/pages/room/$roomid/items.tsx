@@ -14,21 +14,22 @@ export const RoomItemsPage = () => {
   return (
     <div>
       {data.map((item) => (
-        <ul key={item.id}>
-          <li>{item.id}</li>
-          <li>{item.summary}</li>
-          <li>{item.mime_type}</li>
-          <li>{item.item_type}</li>
-          <li>{item.created_at}</li>
-          <li>{item.updated_at}</li>
-          {item.item_type === "image" ? (
-            <img
-              src={`/api/items/${item.id}/raw`}
-              style={{ maxWidth: "100%" }}
-              loading="lazy"
-            />
-          ) : null}
-        </ul>
+        <div key={item.id}>
+          <div>
+            <div>{item.item_type}</div>
+            {item.item_type === "image" ? (
+              <img
+                src={`/api/items/${item.id}/raw`}
+                style={{ maxWidth: "100%" }}
+                loading="lazy"
+              />
+            ) : null}
+          </div>
+          <div>
+            <p>{item.summary}</p>
+            <small>{new Date(item.created_at * 1000).toLocaleString()}</small>
+          </div>
+        </div>
       ))}
     </div>
   );
