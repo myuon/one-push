@@ -24,6 +24,7 @@ main {
       background-color: #f0f0f0;
       display: grid;
       place-items: center;
+      border-radius: 6px;
 
       img {
         width: 100%;
