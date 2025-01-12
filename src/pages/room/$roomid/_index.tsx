@@ -2,10 +2,12 @@ import {
   Link,
   Outlet,
   useLoaderData,
+  useParams,
   type LoaderFunctionArgs,
 } from "react-router";
 import type { Room } from "../../../models/room";
 import "./_index.modules.css";
+import { useEffect } from "react";
 
 const loader = async ({ params }: LoaderFunctionArgs) => {
   const resp = await fetch(`/api/rooms/${params.roomId}`);
@@ -13,7 +15,12 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 export const RoomPage = () => {
+  const { roomId } = useParams<{ roomId: string }>();
   const room = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    localStorage.setItem("roomId", roomId ?? "");
+  }, []);
 
   return (
     <div className="container">
