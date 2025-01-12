@@ -65,6 +65,13 @@
       "type": "image/png",
       "form_factor": "wide",
       "label": "One-push icon"
+    },
+    {
+      "src": "images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "One-push icon"
     }
   ],
   "share_target": {
