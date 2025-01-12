@@ -1,4 +1,5 @@
 import {
+  Link,
   useLoaderData,
   useNavigate,
   type LoaderFunctionArgs,
@@ -17,13 +18,16 @@ export const RoomItemsPage = () => {
   const data = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
+  const search = new URLSearchParams(location.search);
+  const focusedItem = data.find((item) => item.id === search.get("item"));
+
   return (
     <main>
       <h2>Files</h2>
 
       <div className="item-list">
         {data.map((item) => (
-          <div key={item.id} className="item">
+          <Link to={`.?item=${item.id}`} key={item.id} className="item">
             <div className="item-cover">
               {item.item_type === "image" ? (
                 <img src={`/api/items/${item.id}/raw`} loading="lazy" />
@@ -37,6 +41,9 @@ export const RoomItemsPage = () => {
             </div>
             <button
               onClick={async () => {
+                const ok = window.confirm("Area you sure to delete?");
+                if (!ok) return;
+
                 const resp = await fetch(`/api/items/${item.id}`, {
                   method: "DELETE",
                 });
@@ -51,9 +58,24 @@ export const RoomItemsPage = () => {
             >
               削除
             </button>
-          </div>
+          </Link>
         ))}
       </div>
+
+      {focusedItem ? (
+        <div className="sheet">
+          <ul>
+            <li>item: {focusedItem.id}</li>
+            <li>
+              <a href={`/api/items/${focusedItem.id}/raw`} type="image/png">
+                Open in new tab
+              </a>
+            </li>
+            <li>Share</li>
+            <li>Copy to clipboard</li>
+          </ul>
+        </div>
+      ) : null}
     </main>
   );
 };

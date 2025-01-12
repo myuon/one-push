@@ -155,14 +155,19 @@ const routes = {
     {
       method: "GET",
       handler: async (params: Record<string, string>, request: Request) => {
-        const contentType = request.headers.get("Content-Type");
         const itemId = params.itemId;
+        const item = db
+          .query(`SELECT * FROM items WHERE id = $item_id`)
+          .as(Item)
+          .get({
+            item_id: itemId,
+          });
 
         const bytes = await Bun.file(`./db/objects/${itemId}`).bytes();
 
         return new Response(bytes, {
           headers: {
-            "Content-Type": contentType ?? "application/octet-stream",
+            "Content-Type": item?.mime_type ?? "application/octet-stream",
           },
         });
       },
