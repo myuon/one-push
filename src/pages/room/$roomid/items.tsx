@@ -1,5 +1,5 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
-import type { Item } from "../models/item";
+import type { Item } from "../../../models/item";
 
 const loader = async ({ params }: LoaderFunctionArgs) => {
   const resp = await fetch(`/api/rooms/${params.roomId}/items`, {

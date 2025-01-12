@@ -4,7 +4,7 @@ import {
   useLoaderData,
   type LoaderFunctionArgs,
 } from "react-router";
-import type { Room } from "../models/room";
+import type { Room } from "../../../models/room";
 
 const loader = async ({ params }: LoaderFunctionArgs) => {
   const resp = await fetch(`/api/rooms/${params.roomId}`);

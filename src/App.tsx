@@ -1,14 +1,8 @@
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  Route,
-  RouterProvider,
-  Routes,
-} from "react-router";
-import { IndexPage } from "./pages/Index";
-import { RoomPage } from "./pages/Room";
-import { RoomUploadPage } from "./pages/RoomUpload";
-import { RoomItemsPage } from "./pages/RoomItems";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import { IndexPage } from "./pages/_index";
+import { RoomPage } from "./pages/room/$roomid/_index";
+import { RoomUploadPage } from "./pages/room/$roomid/upload";
+import { RoomItemsPage } from "./pages/room/$roomid/items";
 
 const router = createBrowserRouter([
   {
@@ -26,11 +20,11 @@ const router = createBrowserRouter([
         element: <RoomItemsPage />,
         loader: RoomItemsPage.loader,
       },
+      {
+        path: "upload",
+        element: <RoomUploadPage />,
+      },
     ],
-  },
-  {
-    path: "/rooms/:roomId/upload",
-    element: <RoomUploadPage />,
   },
 ]);
 
