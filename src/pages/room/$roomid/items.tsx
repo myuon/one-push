@@ -64,15 +64,64 @@ export const RoomItemsPage = () => {
 
       {focusedItem ? (
         <div className="sheet">
+          <Link to="." className="close">
+            Close
+          </Link>
+
+          <div className="focused-item">
+            <div className="item">
+              <div className="item-cover">
+                {focusedItem.item_type === "image" ? (
+                  <img
+                    src={`/api/items/${focusedItem.id}/raw`}
+                    loading="lazy"
+                  />
+                ) : (
+                  <span>{focusedItem.item_type}</span>
+                )}
+              </div>
+              <div className="item-content">
+                <p>{focusedItem.summary}</p>
+                <small>
+                  {new Date(focusedItem.created_at * 1000).toLocaleString()}
+                </small>
+              </div>
+            </div>
+          </div>
+
           <ul>
-            <li>item: {focusedItem.id}</li>
             <li>
               <a href={`/api/items/${focusedItem.id}/raw`} type="image/png">
                 Open in new tab
               </a>
             </li>
-            <li>Share</li>
-            <li>Copy to clipboard</li>
+            <li>
+              <button
+                style={{ fontSize: "inherit", outline: "none", border: "none" }}
+                onClick={() => {
+                  navigator.share({
+                    title: "One-push share",
+                    text: focusedItem.summary,
+                    url: `/api/items/${focusedItem.id}/raw`,
+                  });
+                }}
+              >
+                Share
+              </button>
+            </li>
+            <li>
+              <button
+                style={{ fontSize: "inherit", outline: "none", border: "none" }}
+                onClick={async () => {
+                  const resp = await fetch(`/api/items/${focusedItem.id}/raw`);
+                  const text = await resp.text();
+
+                  await navigator.clipboard.writeText(text);
+                }}
+              >
+                Copy to clipboard
+              </button>
+            </li>
           </ul>
         </div>
       ) : null}
