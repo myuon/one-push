@@ -27,117 +27,129 @@ if (result.values().length === 0) {
 }
 
 const routes = {
-  "/api/rooms/:roomId": {
-    method: "GET",
-    handler: async (params: Record<string, string>, request: Request) => {
-      const result = db.query(`SELECT * FROM rooms WHERE id = $room_id`).get({
-        room_id: params.roomId,
-      });
-
-      return new Response(JSON.stringify(result), {
-        headers: { "Content-Type": "application/json" },
-      });
-    },
-  },
-  "/api/rooms/:roomId/items": {
-    method: "GET",
-    handler: async (params: Record<string, string>) => {
-      const result = db
-        .query(`SELECT * FROM items WHERE room_id = $room_id`)
-        .as(Item)
-        .all({
+  "/api/rooms/:roomId": [
+    {
+      method: "GET",
+      handler: async (params: Record<string, string>, request: Request) => {
+        const result = db.query(`SELECT * FROM rooms WHERE id = $room_id`).get({
           room_id: params.roomId,
         });
 
-      return new Response(JSON.stringify(result), {
-        headers: { "Content-Type": "application/json" },
-      });
+        return new Response(JSON.stringify(result), {
+          headers: { "Content-Type": "application/json" },
+        });
+      },
     },
-  },
-  "/api/rooms/:roomId/upload": {
-    method: "POST",
-    handler: async (params: Record<string, string>, request: Request) => {
-      const body = (await request.json()) as {
-        item_type: string;
-        summary: string;
-        mime_type: string;
-      };
+  ],
+  "/api/rooms/:roomId/items": [
+    {
+      method: "GET",
+      handler: async (params: Record<string, string>) => {
+        const result = db
+          .query(`SELECT * FROM items WHERE room_id = $room_id`)
+          .as(Item)
+          .all({
+            room_id: params.roomId,
+          });
 
-      const itemId = Bun.randomUUIDv7();
+        return new Response(JSON.stringify(result), {
+          headers: { "Content-Type": "application/json" },
+        });
+      },
+    },
+  ],
+  "/api/rooms/:roomId/upload": [
+    {
+      method: "POST",
+      handler: async (params: Record<string, string>, request: Request) => {
+        const body = (await request.json()) as {
+          item_type: string;
+          summary: string;
+          mime_type: string;
+        };
 
-      db.query(
-        `INSERT INTO items (id, room_id, item_type, summary, created_at, updated_at) VALUES ($id, $room_id, $item_type, $summary, $created_at, $updated_at)`
-      ).run({
-        id: itemId,
-        room_id: params.roomId,
-        item_type: body.item_type,
-        summary: body.summary,
-        mime_type: body.mime_type,
-        created_at: Math.floor(Date.now() / 1000),
-        updated_at: Math.floor(Date.now() / 1000),
-      });
+        const itemId = Bun.randomUUIDv7();
 
-      return new Response(
-        JSON.stringify({
+        db.query(
+          `INSERT INTO items (id, room_id, item_type, summary, created_at, updated_at) VALUES ($id, $room_id, $item_type, $summary, $created_at, $updated_at)`
+        ).run({
           id: itemId,
-        }),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    },
-  },
-  "/api/items/:itemId/upload": {
-    method: "POST",
-    handler: async (params: Record<string, string>, request: Request) => {
-      const itemId = params.itemId;
-
-      const bytes = await Bun.file(`./db/objects/${itemId}`).write(
-        await request.arrayBuffer()
-      );
-
-      return new Response(
-        JSON.stringify({
-          bytes,
-        }),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    },
-  },
-  "/api/items/:itemId": {
-    method: "GET",
-    handler: async (params: Record<string, string>) => {
-      const itemId = params.itemId;
-
-      const item = db
-        .query(`SELECT * FROM items WHERE id = $item_id`)
-        .as(Item)
-        .get({
-          item_id: itemId,
+          room_id: params.roomId,
+          item_type: body.item_type,
+          summary: body.summary,
+          mime_type: body.mime_type,
+          created_at: Math.floor(Date.now() / 1000),
+          updated_at: Math.floor(Date.now() / 1000),
         });
 
-      return new Response(JSON.stringify(item), {
-        headers: { "Content-Type": "application/json" },
-      });
+        return new Response(
+          JSON.stringify({
+            id: itemId,
+          }),
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      },
     },
-  },
-  "/api/items/:itemId/raw": {
-    method: "GET",
-    handler: async (params: Record<string, string>, request: Request) => {
-      const contentType = request.headers.get("Content-Type");
-      const itemId = params.itemId;
+  ],
+  "/api/items/:itemId/upload": [
+    {
+      method: "POST",
+      handler: async (params: Record<string, string>, request: Request) => {
+        const itemId = params.itemId;
 
-      const bytes = await Bun.file(`./db/objects/${itemId}`).bytes();
+        const bytes = await Bun.file(`./db/objects/${itemId}`).write(
+          await request.arrayBuffer()
+        );
 
-      return new Response(bytes, {
-        headers: {
-          "Content-Type": contentType ?? "application/octet-stream",
-        },
-      });
+        return new Response(
+          JSON.stringify({
+            bytes,
+          }),
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      },
     },
-  },
+  ],
+  "/api/items/:itemId": [
+    {
+      method: "GET",
+      handler: async (params: Record<string, string>) => {
+        const itemId = params.itemId;
+
+        const item = db
+          .query(`SELECT * FROM items WHERE id = $item_id`)
+          .as(Item)
+          .get({
+            item_id: itemId,
+          });
+
+        return new Response(JSON.stringify(item), {
+          headers: { "Content-Type": "application/json" },
+        });
+      },
+    },
+  ],
+  "/api/items/:itemId/raw": [
+    {
+      method: "GET",
+      handler: async (params: Record<string, string>, request: Request) => {
+        const contentType = request.headers.get("Content-Type");
+        const itemId = params.itemId;
+
+        const bytes = await Bun.file(`./db/objects/${itemId}`).bytes();
+
+        return new Response(bytes, {
+          headers: {
+            "Content-Type": contentType ?? "application/octet-stream",
+          },
+        });
+      },
+    },
+  ],
 } as Record<
   string,
   {
@@ -146,7 +158,7 @@ const routes = {
       params: Record<string, string>,
       request: Request
     ) => Promise<Response>;
-  }
+  }[]
 >;
 const handler = serveRoutes(routes);
 
