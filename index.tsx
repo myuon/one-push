@@ -164,7 +164,7 @@ Bun.serve(
 
         const distFile = Bun.file("./dist" + path.pathname);
         if (request.method === "GET" && (await distFile.exists())) {
-          return new Response(Bun.file("./dist/main.js"), {
+          return new Response(distFile, {
             headers: { "Content-Type": distFile.type },
           });
         }
