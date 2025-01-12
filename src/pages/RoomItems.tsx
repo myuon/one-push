@@ -25,6 +25,7 @@ export const RoomItemsPage = () => {
             <img
               src={`/api/items/${item.id}/raw`}
               style={{ maxWidth: "100%" }}
+              loading="lazy"
             />
           ) : null}
         </ul>

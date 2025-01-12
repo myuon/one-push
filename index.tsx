@@ -1,6 +1,7 @@
 import configureHotReload from "bun-hot-reload";
 import Database from "bun:sqlite";
 import { parsePathParam } from "./src/pathParam";
+import { Item } from "./src/models/item";
 
 const db = new Database("./db/db.sqlite3", { strict: true, create: true });
 db.exec("PRAGMA journal_mode = WAL;");
@@ -54,10 +55,9 @@ Bun.serve(
               path.pathname
             );
             if (params !== undefined && request.method === "GET") {
-              console.log(params.roomId);
-
               const result = db
                 .query(`SELECT * FROM items WHERE room_id = $room_id`)
+                .as(Item)
                 .all({
                   room_id: params.roomId,
                 });
@@ -132,6 +132,7 @@ Bun.serve(
 
               const item = db
                 .query(`SELECT * FROM items WHERE id = $item_id`)
+                .as(Item)
                 .get({
                   item_id: itemId,
                 });
