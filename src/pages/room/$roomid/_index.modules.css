@@ -1,0 +1,15 @@
+.container {
+  display: grid;
+  gap: 16px;
+}
+
+header {
+  padding: 16px 16px 0 16px; 
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+
+  h2 {
+    font-size: 16px;
+  }
+}

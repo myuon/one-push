@@ -18,7 +18,7 @@ export const RoomItemsPage = () => {
   const navigate = useNavigate();
 
   return (
-    <main className="page">
+    <main>
       <h2>Files</h2>
 
       <div className="item-list">
