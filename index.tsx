@@ -37,19 +37,14 @@ Bun.serve(
           const params = parsePathParam("/api/rooms/:roomId", path.pathname);
           if (params !== undefined && request.method === "GET") {
             const result = db
-              .query(`SELECT * FROM rooms WHERE room_id = $room_id`)
+              .query(`SELECT * FROM rooms WHERE id = $room_id`)
               .get({
                 room_id: params.roomId,
               });
 
-            return new Response(
-              JSON.stringify({
-                items: result,
-              }),
-              {
-                headers: { "Content-Type": "application/json" },
-              }
-            );
+            return new Response(JSON.stringify(result), {
+              headers: { "Content-Type": "application/json" },
+            });
           }
 
           if (request.method === "POST" && path.pathname === "/api/echo") {

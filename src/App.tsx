@@ -1,31 +1,26 @@
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  Route,
+  RouterProvider,
+  Routes,
+} from "react-router";
+import { IndexPage } from "./pages/Index";
+import { RoomPage } from "./pages/Room";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <IndexPage />,
+    index: true,
+  },
+  {
+    path: "/rooms/:roomId",
+    element: <RoomPage />,
+    loader: RoomPage.loader,
+  },
+]);
+
 export const App = () => {
-  return (
-    <div>
-      <h1>Hello, World!</h1>
-
-      <p>
-        Lorem ipsum:{" "}
-        <button
-          type="button"
-          onClick={() => {
-            console.log("Hello, Bun!");
-
-            fetch("/api/echo", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ name: "Bun" }),
-            }).then((response) => {
-              response.json().then((json) => {
-                alert(json.message);
-              });
-            });
-          }}
-        >
-          Click me!
-        </button>
-      </p>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
