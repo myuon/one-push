@@ -20,10 +20,11 @@ export const RoomItemsPage = () => {
         {data.map((item) => (
           <div key={item.id} className="item">
             <div className="item-cover">
-              {/* <div>{item.item_type}</div> */}
               {item.item_type === "image" ? (
                 <img src={`/api/items/${item.id}/raw`} loading="lazy" />
-              ) : null}
+              ) : (
+                <span>{item.item_type}</span>
+              )}
             </div>
             <div className="item-content">
               <p>{item.summary}</p>
