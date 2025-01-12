@@ -1,4 +1,4 @@
-import { useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { Link, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import type { Room } from "../models/room";
 
 const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -14,6 +14,8 @@ export const RoomPage = () => {
       <p>{room.id}</p>
       <p>created_at: {room.created_at}</p>
       <p>updated_at: {room.created_at}</p>
+
+      <Link to="./upload">UPLOAD</Link>
     </div>
   );
 };

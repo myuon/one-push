@@ -7,6 +7,7 @@ import {
 } from "react-router";
 import { IndexPage } from "./pages/Index";
 import { RoomPage } from "./pages/Room";
+import { RoomUploadPage } from "./pages/RoomUpload";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     path: "/rooms/:roomId",
     element: <RoomPage />,
     loader: RoomPage.loader,
+  },
+  {
+    path: "/rooms/:roomId/upload",
+    element: <RoomUploadPage />,
   },
 ]);
 
