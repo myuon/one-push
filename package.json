@@ -17,6 +17,10 @@
     "react-router": "^7.1.1"
   },
   "scripts": {
-    "dev": "bun --watch index.ts"
+    "dev": "NODE_ENV=development bun --watch index.ts",
+    "build:web": "bun build ./src/main.tsx ./src/sw.ts --outdir ./dist --experimental-css",
+    "build:api": "bun build ./index.ts --outdir . --target bun",
+    "build": "bun run build:web && bun run build:api",
+    "start": "NODE_ENV=production bun index.js"
   }
 }
