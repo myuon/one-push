@@ -20,25 +20,13 @@ export const ShareTargetPage = () => {
             item_type: "link",
             summary: `${title}\n${text}\n${url}`,
             mime_type: "text/plain",
+            url,
           }),
         });
         if (!resp.ok) {
           console.error(resp.statusText);
           throw new Error("Failed to upload");
         }
-
-        const { id: itemId } = (await resp.json()) as { id: string };
-
-        const uploadResp = await fetch(`/api/items/${itemId}/upload`, {
-          method: "POST",
-          body: url || text,
-        });
-        if (!uploadResp.ok) {
-          console.error(uploadResp.statusText);
-          throw new Error("Failed to upload");
-        }
-
-        console.log(await uploadResp.text());
 
         navigate(`/rooms/${roomId}`);
       }}

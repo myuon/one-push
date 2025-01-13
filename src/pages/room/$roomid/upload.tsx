@@ -29,6 +29,7 @@ export const RoomUploadPage = () => {
               item_type: "image",
               summary: file.name,
               mime_type: file.type,
+              url: "",
             }),
           });
           if (!resp.ok) {

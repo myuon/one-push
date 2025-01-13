@@ -6,6 +6,7 @@ export class Item {
   summary: string;
   created_at: number;
   updated_at: number;
+  url: string;
 
   constructor(
     id: string,
@@ -14,7 +15,8 @@ export class Item {
     mime_type: string,
     summary: string,
     created_at: number,
-    updated_at: number
+    updated_at: number,
+    url: string
   ) {
     this.id = id;
     this.room_id = room_id;
@@ -23,5 +25,6 @@ export class Item {
     this.summary = summary;
     this.created_at = created_at;
     this.updated_at = updated_at;
+    this.url = url;
   }
 }

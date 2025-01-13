@@ -10,7 +10,14 @@ db.exec("PRAGMA journal_mode = WAL;");
 db.exec(`CREATE TABLE IF NOT EXISTS rooms
   (id TEXT PRIMARY KEY, created_at INTEGER, updated_at INTEGER)`);
 db.exec(`CREATE TABLE IF NOT EXISTS items
-  (id TEXT PRIMARY KEY, room_id TEXT, item_type TEXT, mime_type TEXT, summary TEXT, created_at INTEGER, updated_at INTEGER)`);
+  (id TEXT PRIMARY KEY, room_id TEXT, item_type TEXT, mime_type TEXT, summary TEXT, url TEXT, created_at INTEGER, updated_at INTEGER)`);
+
+// migration
+try {
+  db.exec(`ALTER TABLE items ADD COLUMN url TEXT`);
+} catch (err) {
+  console.log(`Ignored: ${err}`);
+}
 
 const result = db.query(`SELECT * FROM rooms`);
 if (result.values().length === 0) {
@@ -67,12 +74,13 @@ const routes = {
           item_type: string;
           summary: string;
           mime_type: string;
+          url: string;
         };
 
         const itemId = Bun.randomUUIDv7();
 
         db.query(
-          `INSERT INTO items (id, room_id, item_type, summary, created_at, updated_at) VALUES ($id, $room_id, $item_type, $summary, $created_at, $updated_at)`
+          `INSERT INTO items (id, room_id, item_type, summary, created_at, updated_at, url) VALUES ($id, $room_id, $item_type, $summary, $created_at, $updated_at, $url)`
         ).run({
           id: itemId,
           room_id: params.roomId,
@@ -81,6 +89,7 @@ const routes = {
           mime_type: body.mime_type,
           created_at: Math.floor(Date.now() / 1000),
           updated_at: Math.floor(Date.now() / 1000),
+          url: body.url,
         });
 
         return new Response(

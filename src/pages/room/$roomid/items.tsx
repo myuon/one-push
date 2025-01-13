@@ -91,9 +91,11 @@ export const RoomItemsPage = () => {
 
           <ul>
             <li>
-              <a href={`/api/items/${focusedItem.id}/raw`} type="image/png">
-                Open in new tab
-              </a>
+              {focusedItem.item_type === "link" ? (
+                <a href={focusedItem.url}>Open</a>
+              ) : (
+                <a href={`/api/items/${focusedItem.id}/raw`}>Open</a>
+              )}
             </li>
             <li>
               <button
