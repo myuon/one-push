@@ -4,6 +4,7 @@ import { RoomPage } from "./pages/room/$roomid/_index";
 import { RoomUploadPage } from "./pages/room/$roomid/upload";
 import { RoomItemsPage } from "./pages/room/$roomid/items";
 import { useEffect } from "react";
+import { ShareTargetPage } from "./pages/share_target";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
         element: <RoomUploadPage />,
       },
     ],
+  },
+  {
+    path: "/share-target",
+    element: <ShareTargetPage />,
   },
 ]);
 
