@@ -38,12 +38,26 @@ export const App = () => {
   useEffect(() => {
     (async () => {
       if ("serviceWorker" in navigator) {
-        const reg = await navigator.serviceWorker.getRegistration();
+        let reg = await navigator.serviceWorker.getRegistration();
         console.log(reg);
 
         if (!reg?.active) {
-          await navigator.serviceWorker.register("/sw.js");
+          reg = await navigator.serviceWorker.register("/sw.js");
         }
+
+        reg.addEventListener("updatefound", () => {
+          const installingWorker = reg.installing;
+          if (installingWorker != null) {
+            installingWorker.onstatechange = (event) => {
+              // @ts-ignore
+              if (event.target?.state == "installed") {
+                window.alert(
+                  "更新がインストールされました。アプリを再起動してください。"
+                );
+              }
+            };
+          }
+        });
       }
     })();
   }, []);
