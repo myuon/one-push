@@ -192,11 +192,14 @@ const withLogging =
   ) =>
   async (request: Request, server: Server) => {
     const now = Date.now();
+    const url = new URL(request.url);
     const resp = await fetch(request, server);
     console.log(
       `[${new Date(now).toLocaleString("ja-JP", {
         timeZone: "Asia/Tokyo",
-      })}] ${request.method} ${request.url} ${resp?.status} ${Date.now() - now}`
+      })}] ${request.method} ${url.pathname}${url.search} ${resp?.status} ${
+        Date.now() - now
+      }`
     );
 
     return resp;
