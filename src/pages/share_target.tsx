@@ -31,7 +31,7 @@ export const ShareTargetPage = () => {
 
         const uploadResp = await fetch(`/api/items/${itemId}/upload`, {
           method: "POST",
-          body: url,
+          body: url || text,
         });
         if (!uploadResp.ok) {
           console.error(uploadResp.statusText);
