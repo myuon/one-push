@@ -2,6 +2,7 @@ import configureHotReload from "bun-hot-reload";
 import Database from "bun:sqlite";
 import { Item } from "./src/models/item";
 import { serveRoutes } from "./src/serveRoutes";
+import type { Server } from "bun";
 
 const db = new Database("./db/db.sqlite3", { strict: true, create: true });
 db.exec("PRAGMA journal_mode = WAL;");
@@ -185,13 +186,28 @@ const routes = {
 >;
 const handler = serveRoutes(routes);
 
+const withLogging =
+  (
+    fetch: (request: Request, server: Server) => Promise<Response | undefined>
+  ) =>
+  async (request: Request, server: Server) => {
+    const now = Date.now();
+    const resp = await fetch(request, server);
+    console.log(
+      `[${new Date(now).toLocaleString("ja-JP", {
+        timeZone: "Asia/Tokyo",
+      })}] ${request.method} ${request.url} ${resp?.status} ${Date.now() - now}`
+    );
+
+    return resp;
+  };
+
 Bun.serve(
   configureHotReload(
     {
       port: 8080,
-      fetch: async (request) => {
+      fetch: withLogging(async (request) => {
         const path = new URL(request.url);
-        console.log(`${request.method} ${path.pathname}`);
 
         if (path.pathname.startsWith("/api")) {
           return handler(request);
@@ -214,7 +230,7 @@ Bun.serve(
         return new Response(Bun.file("./index.html"), {
           headers: { "Content-Type": "text/html" },
         });
-      },
+      }),
     },
     {
       buildConfig: {
